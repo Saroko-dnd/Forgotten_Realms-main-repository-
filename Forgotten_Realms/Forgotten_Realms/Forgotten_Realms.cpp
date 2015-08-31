@@ -18,9 +18,9 @@ using namespace std;
 
 bool end_of_menu_loading = false;
 
-static int TestThread(void* ttt)
+static int loading_screen_Thread(void* current_info)
 {
-	load_screen_info* current_information = (load_screen_info*)ttt;
+	load_screen_info* current_information = (load_screen_info*)current_info;
 	while (!end_of_menu_loading)
 	{
 		loading_screen_function(current_information->render, current_information->texture);
@@ -93,7 +93,7 @@ int main(int argc, char*argv[])
 	current_information.render = ren;
 	current_information.texture = create_texture_function(ren, L"images/load_screens/main_load_screen.png");
 	SDL_Thread *thread_loading_screen;
-	thread_loading_screen = SDL_CreateThread(TestThread, "TestThread", &current_information);
+	thread_loading_screen = SDL_CreateThread(loading_screen_Thread, "loading_screen_Thread", &current_information);
 
 	MENU all_menu_and_important_variables(ren);
 
