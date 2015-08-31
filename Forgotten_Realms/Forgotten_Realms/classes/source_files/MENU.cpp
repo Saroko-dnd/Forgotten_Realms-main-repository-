@@ -13,6 +13,7 @@
 #include "../../functions/headers/load_path_names.h"
 #include <Windows.h>
 #include "../../functions/headers/load_music.h"
+#include "../../functions/headers/load_screen_thread.h"
 
 //эта функция запускает необходимую функцию для обработки меню в конкретный момент
 void MENU::menu_processing()
@@ -40,7 +41,9 @@ bool MENU::quit_state()
 //главное меню
 void MENU::main_menu_processing()
 {
+
 	SDL_RenderClear(ren);
+
 	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
 
 	text our_texts;

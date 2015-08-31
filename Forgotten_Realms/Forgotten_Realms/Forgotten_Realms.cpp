@@ -8,13 +8,31 @@
 #include <cstdio>
 #include <string>
 #include "classes/headers/MENU.h"
+#include "GLOBALS/GLOBAL_VARIABLES.h"
 #include <Windows.h>
 #include "functions/headers/load_music.h"
+#include "functions/headers/create_texture.h"
+#include "functions/headers/load_screen_thread.h"
 
 using namespace std;
 
+bool end_of_menu_loading = false;
+
+static int TestThread(void* ttt)
+{
+	load_screen_info* current_information = (load_screen_info*)ttt;
+	while (!end_of_menu_loading)
+	{
+		loading_screen_function(current_information->render, current_information->texture);
+	}
+	return 1;
+}
+
 int main(int argc, char*argv[])
-{   
+{  
+
+	int result_of_thread = -1;
+
 	srand(time(NULL));
 
 	//получаем разрешение экрана
@@ -69,10 +87,22 @@ int main(int argc, char*argv[])
 		return 1;
 	}
 
+	//SDL_ShowCursor(SDL_DISABLE);
+
+	load_screen_info current_information;
+	current_information.render = ren;
+	current_information.texture = create_texture_function(ren, L"images/load_screens/main_load_screen.png");
+	SDL_Thread *thread_loading_screen;
+	thread_loading_screen = SDL_CreateThread(TestThread, "TestThread", &current_information);
+
 	MENU all_menu_and_important_variables(ren);
 
 	Mix_Chunk *menu_title = NULL;
 	menu_title = load_music_function(L"sound_files/music/mus_global_title_theme.ogg");
+
+	end_of_menu_loading = true;
+	SDL_WaitThread(thread_loading_screen, &result_of_thread);
+
 
 	while (!all_menu_and_important_variables.quit_state())
 	{

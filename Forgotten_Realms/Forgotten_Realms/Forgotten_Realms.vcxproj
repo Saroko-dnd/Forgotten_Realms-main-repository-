@@ -57,9 +57,10 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,6 +89,7 @@
     <ClInclude Include="functions\headers\load_menu_texts.h" />
     <ClInclude Include="functions\headers\load_music.h" />
     <ClInclude Include="functions\headers\load_path_names.h" />
+    <ClInclude Include="functions\headers\load_screen_thread.h" />
     <ClInclude Include="GLOBALS\GLOBAL_VARIABLES.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -99,6 +101,7 @@
     <ClCompile Include="functions\source_files\load_menu_texts.cpp" />
     <ClCompile Include="functions\source_files\load_music_main.cpp" />
     <ClCompile Include="functions\source_files\load_path_names.cpp" />
+    <ClCompile Include="functions\source_files\load_screen_itself.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

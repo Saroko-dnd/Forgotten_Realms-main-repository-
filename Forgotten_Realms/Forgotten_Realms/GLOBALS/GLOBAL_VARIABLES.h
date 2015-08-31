@@ -20,6 +20,12 @@ typedef struct text
 	std::vector<std::wstring> long_;
 }text;
 
+typedef struct load_screen_info
+{
+	SDL_Renderer * render;
+	SDL_Texture * texture;
+}load_screen_info;
+
 typedef struct hero_information
 {
 	bool male;
