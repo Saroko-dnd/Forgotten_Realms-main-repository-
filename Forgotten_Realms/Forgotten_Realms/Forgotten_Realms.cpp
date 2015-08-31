@@ -54,7 +54,7 @@ int main(int argc, char*argv[])
 		return 1;
 	}
 
-	SDL_Window *win = SDL_CreateWindow("Textures test", 100, 100, window_size_x, window_size_y, SDL_WINDOW_SHOWN);
+	SDL_Window *win = SDL_CreateWindow("Textures test", 10, 50, window_size_x, window_size_y, SDL_WINDOW_SHOWN);
 	if (win == nullptr)
 	{
 		std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;

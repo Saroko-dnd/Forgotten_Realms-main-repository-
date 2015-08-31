@@ -19,6 +19,8 @@ private:
 	bool quit;
 	bool check_button_pressed;
 	bool race_selector_text_load_swi;
+
+	std::vector<SDL_Texture *> large_texts;
 	Mix_Chunk *click_wave;
 	SDL_Texture * current_menu;
 	SDL_Texture * information_element;

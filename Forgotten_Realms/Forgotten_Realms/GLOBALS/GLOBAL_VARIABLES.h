@@ -26,6 +26,13 @@ typedef struct load_screen_info
 	SDL_Texture * texture;
 }load_screen_info;
 
+typedef struct text_with_size
+{
+	SDL_Texture * texture;
+	int width_text;
+	int height_text;
+}text_with_size;
+
 typedef struct hero_information
 {
 	bool male;

@@ -918,8 +918,6 @@ void MENU::race_menu_processing()
 
 	if (check_mouse > -1 && check_mouse <= 6)
 	{
-		std::cout << "check_mouse_" << check_mouse << std::endl;
-		std::cout << "vector_size_" << our_texts.long_.size() << std::endl;
 		SDL_Surface* text_surface_add;
 		SDL_Surface* text_surface_add_right;
 		TTF_SizeUNICODE(small_font_add, (Uint16*)our_texts.long_[check_mouse].c_str(), &width_text, &height_text);
@@ -1021,14 +1019,43 @@ MENU::MENU(SDL_Renderer * new_ren)
 	race_selector_text_load_swi = true;
 
 	//загружаем заранее большие куски текста
-	/*text our_texts;
-	SDL_Color White = { 255, 255, 255 };
+	SDL_Rect dstrect;
+	dstrect.x = 10;
+	dstrect.y = (window_size_y) / 5;
+	dstrect.w = (window_size_x - 340) / 2;
+	dstrect.h = ((window_size_y * 2) / 3) + 55;
+
+	text our_texts;
 	our_texts = load_texts_from_file(our_texts, path_name_list[4]);
-	for (int counter = 0; counter < our_texts.short_.size(); ++counter)
+	int width_text, height_text;
+	SDL_Color White = { 255, 255, 255 };
+	for (int counter = 0; counter <= 6; ++counter)
 	{
-		SDL_Surface* text_surface;
-		text_surface = TTF_RenderUNICODE_Blended_Wrapped(small_font_add, (Uint16*)our_texts.short_[counter].c_str(), White,(window_size_x - 340) / 2);
-	}*/
+			SDL_Surface* text_surface_add;
+			SDL_Surface* text_surface_add_right;
+			TTF_SizeUNICODE(small_font_add, (Uint16*)our_texts.long_[counter].c_str(), &width_text, &height_text);
+			text_surface_add = TTF_RenderUNICODE_Blended_Wrapped(small_font_add,
+				(Uint16*)our_texts.long_[counter].c_str(), White, dstrect.w);
+			text_surface_add_right = TTF_RenderUNICODE_Blended_Wrapped(small_font_add,
+				(Uint16*)our_texts.long_[counter + 7].c_str(), White, dstrect.w);
+			if (text_surface_add == nullptr || text_surface_add_right == nullptr)
+			{
+				MessageBox(NULL,
+					(LPCWSTR)L"Cant load text for current menu!",
+					(LPCWSTR)L"Error!",
+					MB_ICONWARNING | MB_OK
+					);
+			}
+			else
+			{
+				SDL_Texture *text_texture_add = SDL_CreateTextureFromSurface(ren, text_surface_add);
+				large_texts.push_back(text_texture_add);
+				SDL_Texture *text_texture_add_right = SDL_CreateTextureFromSurface(ren, text_surface_add_right);
+				large_texts.push_back(text_texture_add_right);
+				SDL_FreeSurface(text_surface_add);
+				SDL_FreeSurface(text_surface_add_right);
+			}
+	}
 	//конец загрузки текста
 
 }	
