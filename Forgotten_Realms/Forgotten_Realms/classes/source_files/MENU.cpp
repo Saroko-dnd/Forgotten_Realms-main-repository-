@@ -918,40 +918,21 @@ void MENU::race_menu_processing()
 
 	if (check_mouse > -1 && check_mouse <= 6)
 	{
-		SDL_Surface* text_surface_add;
-		SDL_Surface* text_surface_add_right;
-		TTF_SizeUNICODE(small_font_add, (Uint16*)our_texts.long_[check_mouse].c_str(), &width_text, &height_text);
-		text_surface_add = TTF_RenderUNICODE_Blended_Wrapped(small_font_add,
-			(Uint16*)our_texts.long_[check_mouse].c_str(), White, dstrect.w);
-		text_surface_add_right = TTF_RenderUNICODE_Blended_Wrapped(small_font_add,
-			(Uint16*)our_texts.long_[check_mouse+7].c_str(), White, dstrect.w);
-		if (text_surface_add == nullptr || text_surface_add_right == nullptr)
-		{
-			MessageBox(NULL,
-				(LPCWSTR)L"Cant load text for current menu!",
-				(LPCWSTR)L"Error!",
-				MB_ICONWARNING | MB_OK
-				);
-		}
-		else
-		{
-			SDL_Texture *text_texture_add = SDL_CreateTextureFromSurface(ren, text_surface_add);
-			dstrect.h = (width_text / dstrect.w)*(height_text + 10);
+			int counter = 0;
+			for (int number = check_mouse; number > 0; --number)
+			{
+				counter += 2;
+			}
+
+			dstrect.h = (large_texts[counter].width_text / dstrect.w)*(large_texts[counter].height_text + 10);
 			dstrect.x = 10;
-			SDL_RenderCopy(ren, text_texture_add, NULL, &dstrect);
-			SDL_Texture *text_texture_add_right = SDL_CreateTextureFromSurface(ren, text_surface_add_right);
-			TTF_SizeUNICODE(small_font_add, (Uint16*)our_texts.long_[check_mouse + 7].c_str(), &width_text, &height_text);
+			SDL_RenderCopy(ren, large_texts[counter].texture, NULL, &dstrect);
 			if (check_mouse != 3)
-				dstrect.h = (width_text / dstrect.w)*(height_text + 15);
+				dstrect.h = (large_texts[counter + 1].width_text / dstrect.w)*(large_texts[counter + 1].height_text + 15);
 			else
-				dstrect.h = (width_text / dstrect.w)*(height_text + 20);
+				dstrect.h = (large_texts[counter + 1].width_text / dstrect.w)*(large_texts[counter + 1].height_text + 20);
 			dstrect.x = dstrect_2.x + 310;
-			SDL_RenderCopy(ren, text_texture_add_right, NULL, &dstrect);
-			SDL_DestroyTexture(text_texture_add_right);
-			SDL_DestroyTexture(text_texture_add);
-			SDL_FreeSurface(text_surface_add);
-			SDL_FreeSurface(text_surface_add_right);
-		}
+			SDL_RenderCopy(ren, large_texts[counter + 1].texture, NULL, &dstrect);
 	}
 
 	SDL_DestroyTexture(frame_texture);
@@ -1025,6 +1006,9 @@ MENU::MENU(SDL_Renderer * new_ren)
 	dstrect.w = (window_size_x - 340) / 2;
 	dstrect.h = ((window_size_y * 2) / 3) + 55;
 
+	text_with_size left_text;
+	text_with_size right_text;
+
 	text our_texts;
 	our_texts = load_texts_from_file(our_texts, path_name_list[4]);
 	int width_text, height_text;
@@ -1033,7 +1017,10 @@ MENU::MENU(SDL_Renderer * new_ren)
 	{
 			SDL_Surface* text_surface_add;
 			SDL_Surface* text_surface_add_right;
-			TTF_SizeUNICODE(small_font_add, (Uint16*)our_texts.long_[counter].c_str(), &width_text, &height_text);
+			TTF_SizeUNICODE(small_font_add, (Uint16*)our_texts.long_[counter].c_str(), &left_text.width_text,
+				&left_text.height_text);
+			TTF_SizeUNICODE(small_font_add, (Uint16*)our_texts.long_[counter + 7].c_str(),
+				&right_text.width_text, &right_text.height_text);
 			text_surface_add = TTF_RenderUNICODE_Blended_Wrapped(small_font_add,
 				(Uint16*)our_texts.long_[counter].c_str(), White, dstrect.w);
 			text_surface_add_right = TTF_RenderUNICODE_Blended_Wrapped(small_font_add,
@@ -1049,15 +1036,16 @@ MENU::MENU(SDL_Renderer * new_ren)
 			else
 			{
 				SDL_Texture *text_texture_add = SDL_CreateTextureFromSurface(ren, text_surface_add);
-				large_texts.push_back(text_texture_add);
+				left_text.texture = text_texture_add;
+				large_texts.push_back(left_text);
 				SDL_Texture *text_texture_add_right = SDL_CreateTextureFromSurface(ren, text_surface_add_right);
-				large_texts.push_back(text_texture_add_right);
+				right_text.texture = text_texture_add_right;
+				large_texts.push_back(right_text);
 				SDL_FreeSurface(text_surface_add);
 				SDL_FreeSurface(text_surface_add_right);
 			}
 	}
 	//конец загрузки текста
-
 }	
 
 
