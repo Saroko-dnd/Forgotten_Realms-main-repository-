@@ -89,11 +89,11 @@ int main(int argc, char*argv[])
 
 	//SDL_ShowCursor(SDL_DISABLE);
 
-	load_screen_info current_information;
-	current_information.render = ren;
-	current_information.texture = create_texture_function(ren, L"images/load_screens/main_load_screen.png");
+	load_screen_info cur_info_for_load_scr_thread;
+	cur_info_for_load_scr_thread.render = ren;
+	cur_info_for_load_scr_thread.texture = create_texture_function(ren, L"images/load_screens/main_load_screen.png");
 	SDL_Thread *thread_loading_screen;
-	thread_loading_screen = SDL_CreateThread(loading_screen_Thread, "loading_screen_Thread", &current_information);
+	thread_loading_screen = SDL_CreateThread(loading_screen_Thread, "loading_screen_Thread", &cur_info_for_load_scr_thread);
 
 	MENU all_menu_and_important_variables(ren);
 
