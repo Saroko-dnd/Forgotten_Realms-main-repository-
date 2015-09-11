@@ -13,7 +13,6 @@ private:
 	hero_information current_hero_information;
 	int click_option;
 	int current_menu_id;
-	int mouse_x, mouse_y;
 	bool sound_swi;
 	bool music_swi;
 	bool quit;
@@ -32,6 +31,7 @@ private:
 	std::vector<SDL_Texture *> very_long_texts_storage;
 	float main_multiplier;//множитель параметров (зависит от выбранного уровня сложности)
 	std::vector<std::wstring> path_name_list;
+	text race_texts;
 
 	void main_menu_processing();
 	void diff_levels_menu_processing();
@@ -39,6 +39,7 @@ private:
 	void sex_menu_processing();
 	void race_menu_processing();
 public:
+	int mouse_x, mouse_y;
 	void menu_processing();
 	hero_information get_hero_information();
 	bool quit_state();

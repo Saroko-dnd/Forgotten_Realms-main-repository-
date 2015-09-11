@@ -45,6 +45,9 @@
     <ClInclude Include="functions\headers\load_screen_thread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="classes\headers\drawing_of_cursor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -69,6 +72,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="functions\source_files\load_screen_itself.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="classes\source_files\drawing_of_cursor_itself.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

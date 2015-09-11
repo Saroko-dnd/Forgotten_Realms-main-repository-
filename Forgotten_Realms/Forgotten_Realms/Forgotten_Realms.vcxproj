@@ -84,6 +84,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="classes\headers\drawing_of_cursor.h" />
     <ClInclude Include="classes\headers\MENU.h" />
     <ClInclude Include="functions\headers\create_texture.h" />
     <ClInclude Include="functions\headers\load_menu_texts.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="classes\source_files\drawing_of_cursor_itself.cpp" />
     <ClCompile Include="classes\source_files\MENU.cpp" />
     <ClCompile Include="Forgotten_Realms.cpp" />
     <ClCompile Include="functions\source_files\create_texture.cpp" />

@@ -13,6 +13,7 @@
 #include "functions/headers/load_music.h"
 #include "functions/headers/create_texture.h"
 #include "functions/headers/load_screen_thread.h"
+#include "classes\headers\drawing_of_cursor.h"
 
 using namespace std;
 
@@ -30,7 +31,9 @@ static int loading_screen_Thread(void* current_info)
 
 int main(int argc, char*argv[])
 {  
-
+	HCURSOR hCurs5;
+	hCurs5 = LoadCursor(NULL, IDC_SIZENWSE);
+	SetCursor(hCurs5);
 	int result_of_thread = -1;
 
 	srand(time(NULL));
@@ -87,7 +90,7 @@ int main(int argc, char*argv[])
 		return 1;
 	}
 
-	//SDL_ShowCursor(SDL_DISABLE);
+	SDL_ShowCursor(SDL_DISABLE);
 
 	load_screen_info cur_info_for_load_scr_thread;
 	cur_info_for_load_scr_thread.render = ren;
@@ -95,6 +98,7 @@ int main(int argc, char*argv[])
 	SDL_Thread *thread_loading_screen;
 	thread_loading_screen = SDL_CreateThread(loading_screen_Thread, "loading_screen_Thread", &cur_info_for_load_scr_thread);
 
+	cursor game_cursor(ren);
 	MENU all_menu_and_important_variables(ren);
 
 	Mix_Chunk *menu_title = NULL;
@@ -106,6 +110,7 @@ int main(int argc, char*argv[])
 
 	while (!all_menu_and_important_variables.quit_state())
 	{
+
 		if (Mix_Playing(1) == 0)
 		{
 			if (Mix_PlayChannel(1, menu_title, 0) == -1)
@@ -117,9 +122,20 @@ int main(int argc, char*argv[])
 					);
 			}
 		}
+		SDL_RenderClear(ren);
 		all_menu_and_important_variables.menu_processing();
+
+		//отрисовка курсора**************************************
+		game_cursor.get_coordinates(all_menu_and_important_variables.mouse_x,
+			all_menu_and_important_variables.mouse_y);
+		game_cursor.draw_cursor();
+		//********************************************************
+
+		SDL_RenderPresent(ren);
 	}
 
+
+	game_cursor.destroy_textures();
 	Mix_FreeChunk(menu_title);
 	Mix_CloseAudio();
 	SDL_DestroyRenderer(ren);

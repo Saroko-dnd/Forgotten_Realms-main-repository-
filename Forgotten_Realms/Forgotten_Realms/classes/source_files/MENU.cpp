@@ -14,6 +14,7 @@
 #include <Windows.h>
 #include "../../functions/headers/load_music.h"
 #include "../../functions/headers/load_screen_thread.h"
+#include <ctime> 
 
 //эта функция запускает необходимую функцию для обработки меню в конкретный момент
 void MENU::menu_processing()
@@ -41,8 +42,6 @@ bool MENU::quit_state()
 //главное меню
 void MENU::main_menu_processing()
 {
-
-	SDL_RenderClear(ren);
 
 	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
 
@@ -182,13 +181,11 @@ void MENU::main_menu_processing()
 		}
 	}
 
-	SDL_RenderPresent(ren);
 }
 
 //меню выбора уровня сложности
 void MENU::diff_levels_menu_processing()
 {
-	SDL_RenderClear(ren);
 	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
 
 	text our_texts;
@@ -387,13 +384,11 @@ void MENU::diff_levels_menu_processing()
 		}
 	}
 
-	SDL_RenderPresent(ren);
 }
 
 //меню настроек
 void MENU::options_menu_processing()
 {
-	SDL_RenderClear(ren);
 	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
 
 	text our_texts;
@@ -631,13 +626,11 @@ void MENU::options_menu_processing()
 		}
 	}
 
-	SDL_RenderPresent(ren);
 }
 
 void MENU::sex_menu_processing()
 {
-	SDL_RenderClear(ren);
-
+	unsigned int start_time = clock(); // начальное время
 	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
 
 	text our_texts;
@@ -791,17 +784,16 @@ void MENU::sex_menu_processing()
 			quit = true;
 		}
 	}
-
-	SDL_RenderPresent(ren);
+	unsigned int end_time = clock(); // конечное время
+	unsigned int search_time = end_time - start_time;
+	end_time = 0;
 }
 
 void MENU::race_menu_processing()
 {
-	SDL_RenderClear(ren);
-
 	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
-	text our_texts;
-	our_texts = load_texts_from_file(our_texts, path_name_list[4]);
+	//text our_texts;
+	//our_texts = load_texts_from_file(our_texts, path_name_list[4]);
 	SDL_Color White = { 255, 255, 255 };
 	SDL_Color Blue = { 0, 0, 255 };
 	int check_mouse = -1, width_text, height_text;
@@ -823,7 +815,7 @@ void MENU::race_menu_processing()
 	SDL_RenderCopy(ren, main_picture_texture, NULL, NULL);
 	SDL_DestroyTexture(main_picture_texture);
 
-	for (int counter = 1; counter <= (our_texts.short_.size() - 1); ++counter)
+	for (int counter = 1; counter <= (race_texts.short_.size() - 1); ++counter)
 	{
 		if (mouse_x > dstrect_2.x && mouse_x < (dstrect_2.x + 300) && mouse_y>dstrect_2.y + (60 * (counter - 1))
 			&& mouse_y<(dstrect_2.y + 50) + (60 * (counter - 1)))
@@ -833,7 +825,7 @@ void MENU::race_menu_processing()
 	}
 
 	//рисуем картинки для меню**************************************************
-	for (int counter = 0; counter < (our_texts.short_.size() - 3); ++counter)
+	for (int counter = 0; counter < (race_texts.short_.size() - 3); ++counter)
 	{
 		SDL_RenderCopy(ren, current_menu, &srcrect_2, &dstrect_2);
 		dstrect_2.y += 60;
@@ -855,16 +847,17 @@ void MENU::race_menu_processing()
 	SDL_RenderCopy(ren, information_element, NULL, &dstrect_info);
 
 	//рисуем текст для меню
-	for (int counter = 0; counter < our_texts.short_.size(); ++counter)
+
+	for (int counter = 0; counter < race_texts.short_.size(); ++counter)
 	{
 		SDL_Surface* text_surface;
 		if ((counter - 3) == check_mouse && (counter - 3) != -1)
 		{
-				text_surface = TTF_RenderUNICODE_Blended(font, (Uint16*)our_texts.short_[counter].c_str(), Blue);
+			text_surface = TTF_RenderUNICODE_Blended(font, (Uint16*)race_texts.short_[counter].c_str(), Blue);
 		}
 		else
 		{
-				text_surface = TTF_RenderUNICODE_Blended(font, (Uint16*)our_texts.short_[counter].c_str(), White);
+			text_surface = TTF_RenderUNICODE_Blended(font, (Uint16*)race_texts.short_[counter].c_str(), White);
 		}
 		if (text_surface == nullptr)
 		{
@@ -876,7 +869,7 @@ void MENU::race_menu_processing()
 		}
 		else
 		{
-			TTF_SizeUNICODE(font, (Uint16*)our_texts.short_[counter].c_str(), &width_text, &height_text);
+			TTF_SizeUNICODE(font, (Uint16*)race_texts.short_[counter].c_str(), &width_text, &height_text);
 			SDL_Texture *text_texture = SDL_CreateTextureFromSurface(ren, text_surface);
 			if (counter > 2)
 			{
@@ -916,6 +909,7 @@ void MENU::race_menu_processing()
 	dstrect.x = dstrect_2.x + 310;
 	SDL_RenderCopy(ren, frame_texture, NULL, &dstrect);
 
+
 	if (check_mouse > -1 && check_mouse <= 6)
 	{
 			int counter = 0;
@@ -934,6 +928,7 @@ void MENU::race_menu_processing()
 			dstrect.x = dstrect_2.x + 310;
 			SDL_RenderCopy(ren, large_texts[counter + 1].texture, NULL, &dstrect);
 	}
+
 
 	SDL_DestroyTexture(frame_texture);
 
@@ -969,8 +964,6 @@ void MENU::race_menu_processing()
 			current_menu_id = MENU_SEX;
 		}
 	}
-
-	SDL_RenderPresent(ren);
 }
 
 hero_information MENU::get_hero_information()
@@ -998,7 +991,7 @@ MENU::MENU(SDL_Renderer * new_ren)
 	click_wave = load_music_function(L"sound_files/sounds/click_sound.ogg");
 	click_option = 0;
 	race_selector_text_load_swi = true;
-
+	race_texts = load_texts_from_file(race_texts, path_name_list[4]);
 	//загружаем заранее большие куски текста
 	SDL_Rect dstrect;
 	dstrect.x = 10;
@@ -1011,7 +1004,6 @@ MENU::MENU(SDL_Renderer * new_ren)
 
 	text our_texts;
 	our_texts = load_texts_from_file(our_texts, path_name_list[4]);
-	int width_text, height_text;
 	SDL_Color White = { 255, 255, 255 };
 	for (int counter = 0; counter <= 6; ++counter)
 	{
