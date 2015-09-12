@@ -42,13 +42,8 @@ bool MENU::quit_state()
 //главное меню
 void MENU::main_menu_processing()
 {
-
-	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
-
 	text our_texts;
 	our_texts = load_texts_from_file(our_texts, path_name_list[0]);
-	SDL_Color White = { 255, 255, 255 };
-	SDL_Color Blue = { 0, 0, 255 };
 	int check_mouse = -1, width_text, height_text;
 	SDL_Rect srcrect_2;
 
@@ -65,7 +60,6 @@ void MENU::main_menu_processing()
 	dstrect_2.h = 50;
 
 	SDL_RenderCopy(ren, main_picture_texture, NULL, NULL);
-	SDL_DestroyTexture(main_picture_texture);
 
 	for (int counter = 1; counter <= our_texts.short_.size(); ++counter)
 	{
@@ -186,12 +180,8 @@ void MENU::main_menu_processing()
 //меню выбора уровня сложности
 void MENU::diff_levels_menu_processing()
 {
-	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
-
 	text our_texts;
 	our_texts = load_texts_from_file(our_texts, path_name_list[1]);
-	SDL_Color White = { 255, 255, 255 };
-	SDL_Color Blue = { 0, 0, 255 };
 	int check_mouse = -1, width_text, height_text;
 	SDL_Rect srcrect_2;
 
@@ -208,7 +198,6 @@ void MENU::diff_levels_menu_processing()
 	dstrect_2.h = 50;
 
 	SDL_RenderCopy(ren, main_picture_texture, NULL, NULL);
-	SDL_DestroyTexture(main_picture_texture);
 
 	for (int counter = 1; counter <= our_texts.short_.size(); ++counter)
 	{
@@ -389,12 +378,8 @@ void MENU::diff_levels_menu_processing()
 //меню настроек
 void MENU::options_menu_processing()
 {
-	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
-
 	text our_texts;
 	our_texts = load_texts_from_file(our_texts, path_name_list[2]);
-	SDL_Color White = { 255, 255, 255 };
-	SDL_Color Blue = { 0, 0, 255 };
 	int check_mouse = -1, width_text, height_text;
 	SDL_Rect srcrect_2;
 
@@ -418,7 +403,6 @@ void MENU::options_menu_processing()
 	dstrect_3.h = 50;
 
 	SDL_RenderCopy(ren, main_picture_texture, NULL, NULL);
-	SDL_DestroyTexture(main_picture_texture);
 
 	for (int counter = 1; counter <= our_texts.short_.size()/2; ++counter)
 	{
@@ -631,13 +615,10 @@ void MENU::options_menu_processing()
 void MENU::sex_menu_processing()
 {
 	unsigned int start_time = clock(); // начальное время
-	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
 
 	text our_texts;
 	our_texts = load_texts_from_file(our_texts, path_name_list[3]);
 
-	SDL_Color White = { 255, 255, 255 };
-	SDL_Color Blue = { 0, 0, 255 };
 	int check_mouse = -1, width_text, height_text;
 	SDL_Rect srcrect_2;
 
@@ -654,7 +635,6 @@ void MENU::sex_menu_processing()
 	dstrect_2.h = 50;
 
 	SDL_RenderCopy(ren, main_picture_texture, NULL, NULL);
-	SDL_DestroyTexture(main_picture_texture);
 
 	for (int counter = 1; counter <= (our_texts.short_.size() - 1); ++counter)
 	{
@@ -743,6 +723,26 @@ void MENU::sex_menu_processing()
 						);
 				}
 			}
+			//добавляем в список текстуру, содержащую выбранную характеристику для персонажа в текстовом виде
+			//start
+			SDL_Surface* text_surface_add;
+			text_surface_add = TTF_RenderUNICODE_Blended_Wrapped(small_font_add,
+				(Uint16*)L"пол: мужской", White, NULL);
+			if (text_surface_add == nullptr)
+			{
+				MessageBox(NULL,
+					(LPCWSTR)L"Cant load text for current menu!",
+					(LPCWSTR)L"Error!",
+					MB_ICONWARNING | MB_OK
+					);
+			}
+			else
+			{
+				SDL_Texture *text_texture_add = SDL_CreateTextureFromSurface(ren, text_surface_add);
+				textures_of_texts_for_list_of_main_character.push_back(text_texture_add);
+				SDL_FreeSurface(text_surface_add);
+			}
+			//end
 			current_hero_information.male = true;
 			current_menu_id = MENU_RACE_SELECTION;
 		}
@@ -760,6 +760,28 @@ void MENU::sex_menu_processing()
 						);
 				}
 			}
+
+			//добавляем в список текстуру, содержащую выбранную характеристику для персонажа в текстовом виде
+			//start
+			SDL_Surface* text_surface_add;
+			text_surface_add = TTF_RenderUNICODE_Blended_Wrapped(small_font_add,
+				(Uint16*)L"пол: женский", White, NULL);
+			if (text_surface_add == nullptr)
+			{
+				MessageBox(NULL,
+					(LPCWSTR)L"Cant load text for current menu!",
+					(LPCWSTR)L"Error!",
+					MB_ICONWARNING | MB_OK
+					);
+			}
+			else
+			{
+				SDL_Texture *text_texture_add = SDL_CreateTextureFromSurface(ren, text_surface_add);
+				textures_of_texts_for_list_of_main_character.push_back(text_texture_add);
+				SDL_FreeSurface(text_surface_add);
+			}
+			//end
+
 			current_hero_information.male = false;
 			current_menu_id = MENU_RACE_SELECTION;
 		}
@@ -777,6 +799,10 @@ void MENU::sex_menu_processing()
 						);
 				}
 			}
+
+			//удаляем последний элемент из списка характеристик персонажа (отмена)
+			textures_of_texts_for_list_of_main_character.pop_back();
+
 			current_menu_id = MENU_DIF_LEVEL;
 		}
 		//******************************************************************************************
@@ -791,11 +817,6 @@ void MENU::sex_menu_processing()
 
 void MENU::race_menu_processing()
 {
-	SDL_Texture * main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
-	//text our_texts;
-	//our_texts = load_texts_from_file(our_texts, path_name_list[4]);
-	SDL_Color White = { 255, 255, 255 };
-	SDL_Color Blue = { 0, 0, 255 };
 	int check_mouse = -1, width_text, height_text;
 
 	SDL_Rect srcrect_2;
@@ -813,7 +834,6 @@ void MENU::race_menu_processing()
 	dstrect_2.h = 50;
 
 	SDL_RenderCopy(ren, main_picture_texture, NULL, NULL);
-	SDL_DestroyTexture(main_picture_texture);
 
 	for (int counter = 1; counter <= (race_texts.short_.size() - 1); ++counter)
 	{
@@ -966,6 +986,31 @@ void MENU::race_menu_processing()
 	}
 }
 
+void MENU::list_of_selected_parameters_menu_processing()
+{
+	int check_mouse = -1, width_text, height_text;
+
+	text our_texts;
+	our_texts = load_texts_from_file(our_texts, path_name_list[5]);
+
+	SDL_Rect srcrect_2;
+
+	srcrect_2.x = 0;
+	srcrect_2.y = 0;
+	srcrect_2.w = 300;
+	srcrect_2.h = 50;
+
+	SDL_Rect dstrect_2;
+
+	dstrect_2.x = (window_size_x - 300) / 2;
+	dstrect_2.y = window_size_y - 120;
+	dstrect_2.w = 300;
+	dstrect_2.h = 50;
+
+	SDL_RenderCopy(ren, main_picture_texture, NULL, NULL);
+
+}
+
 hero_information MENU::get_hero_information()
 {
 	return current_hero_information;
@@ -973,6 +1018,8 @@ hero_information MENU::get_hero_information()
 
 MENU::MENU(SDL_Renderer * new_ren)
 {
+	White = { 255, 255, 255 };
+	Blue = { 0, 0, 255 };
 	path_name_list = load_path_names_function();
 	font = TTF_OpenFont("C:/windows/fonts/Arial.ttf", 30);
 	font_add = TTF_OpenFont("C:/windows/fonts/Arial.ttf", 30);
@@ -982,6 +1029,7 @@ MENU::MENU(SDL_Renderer * new_ren)
 	ren = new_ren;
 	current_menu = create_texture_function(ren, L"images/menu_images/MENU_basic_element.png");
 	information_element = create_texture_function(ren, L"images/menu_images/MENU_information_element.png");
+	main_picture_texture = create_texture_function(ren, L"images/menu_images/main_picture.png");
 	quit = false;
 	sound_swi = true;
 	music_swi = true;
@@ -1045,5 +1093,10 @@ MENU::~MENU()
 {
 	SDL_DestroyTexture(current_menu);
 	SDL_DestroyTexture(information_element);
+	SDL_DestroyTexture(main_picture_texture);
+	for (int counter = 0; counter < textures_of_texts_for_list_of_main_character.size(); ++counter)
+	{
+		SDL_DestroyTexture(textures_of_texts_for_list_of_main_character[counter]);
+	}
 	Mix_FreeChunk(click_wave);
 }

@@ -19,6 +19,7 @@ using namespace std;
 
 bool end_of_menu_loading = false;
 
+//отвечает за загрузочный экран при запуске игры
 static int loading_screen_Thread(void* current_info)
 {
 	load_screen_info* current_information = (load_screen_info*)current_info;
@@ -31,9 +32,6 @@ static int loading_screen_Thread(void* current_info)
 
 int main(int argc, char*argv[])
 {  
-	HCURSOR hCurs5;
-	hCurs5 = LoadCursor(NULL, IDC_SIZENWSE);
-	SetCursor(hCurs5);
 	int result_of_thread = -1;
 
 	srand(time(NULL));
@@ -90,8 +88,9 @@ int main(int argc, char*argv[])
 		return 1;
 	}
 
+	//убирает апаратный курсор
 	SDL_ShowCursor(SDL_DISABLE);
-
+	
 	load_screen_info cur_info_for_load_scr_thread;
 	cur_info_for_load_scr_thread.render = ren;
 	cur_info_for_load_scr_thread.texture = create_texture_function(ren, L"images/load_screens/main_load_screen.png");
@@ -100,14 +99,14 @@ int main(int argc, char*argv[])
 
 	cursor game_cursor(ren);
 	MENU all_menu_and_important_variables(ren);
-
+	
 	Mix_Chunk *menu_title = NULL;
 	menu_title = load_music_function(L"sound_files/music/mus_global_title_theme.ogg");
 
 	end_of_menu_loading = true;
 	SDL_WaitThread(thread_loading_screen, &result_of_thread);
 
-
+	//главный игровой цикл
 	while (!all_menu_and_important_variables.quit_state())
 	{
 

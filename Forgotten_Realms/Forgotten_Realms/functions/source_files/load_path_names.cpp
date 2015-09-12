@@ -11,6 +11,7 @@ std::vector<std::wstring> load_path_names_function()
 	buf_vector.push_back(L"texts/MENU_options.txt");//2
 	buf_vector.push_back(L"texts/MENU_sex.txt");//3
 	buf_vector.push_back(L"texts/MENU_race.txt");//4
+	buf_vector.push_back(L"texts/MENU_list_of_parameters.txt");//5
 	return buf_vector;
 }
 
