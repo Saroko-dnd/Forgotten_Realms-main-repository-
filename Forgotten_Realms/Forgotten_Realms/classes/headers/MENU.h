@@ -17,10 +17,10 @@ private:
 	//в которых игрок определяет характеристики и другие особенности своего персонажа)
 	int number_of_passed_menu = 0;
 	//текстуры с текстом для списка того, что игрок уже выбрал для своего персонажа при его создании
-	std::vector<SDL_Texture *> textures_of_texts_for_list_of_main_character;
+	std::vector<text_with_size> textures_of_texts_for_list_of_main_character;
 	//id меню на которое нужно переключиться по кнопке (назад) в 
 	//list_of_selected_parameters_menu_processing
-	int last_menu_id;
+	int prev_menu_id;
 	//id меню на которое нужно переключиться по кнопке (далее) в 
 	//list_of_selected_parameters_menu_processing
 	int next_menu_id;
@@ -36,6 +36,8 @@ private:
 	SDL_Texture * current_menu;
 	SDL_Texture * information_element;
 	SDL_Texture * main_picture_texture;
+	//тестура-окно для больших описаний
+	SDL_Texture * frame_texture;
 	SDL_Event our_event;
 	SDL_Color White;
 	SDL_Color Blue;
